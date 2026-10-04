@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getGoals, Goal, addCheckin, getCheckinsForGoal } from '../lib/db';
-import { getLocalDateString } from '../lib/stats';
+import { getLocalDateString, calculateGoalStats, GoalStats } from '../lib/stats';
 import { CheckCircle2, Circle } from 'lucide-react';
 
 export interface GoalListProps {
@@ -9,28 +9,29 @@ export interface GoalListProps {
 
 export const GoalList: React.FC<GoalListProps> = ({ onSelectGoal }) => {
   const [goals, setGoals] = useState<Goal[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [goalStats, setGoalStats] = useState<Record<string, GoalStats>>({});
   const [todayCheckins, setTodayCheckins] = useState<Set<string>>(new Set());
   const [activeCheckInGoalId, setActiveCheckInGoalId] = useState<string | null>(null);
   const [checkInValue, setCheckInValue] = useState<number | ''>('');
 
   const loadData = async () => {
-    setLoading(true);
     const loadedGoals = await getGoals();
     setGoals(loadedGoals);
     
     const today = getLocalDateString();
     const checkedInSet = new Set<string>();
+    const statsMap: Record<string, GoalStats> = {};
     
     for (const goal of loadedGoals) {
       const checkins = await getCheckinsForGoal(goal.id);
       if (checkins.some(c => c.date === today)) {
         checkedInSet.add(goal.id);
       }
+      statsMap[goal.id] = calculateGoalStats(goal, checkins);
     }
     
     setTodayCheckins(checkedInSet);
-    setLoading(false);
+    setGoalStats(statsMap);
   };
 
   useEffect(() => {
@@ -51,13 +52,8 @@ export const GoalList: React.FC<GoalListProps> = ({ onSelectGoal }) => {
 
   const submitCheckIn = async (goalId: string, value: number) => {
     const today = getLocalDateString();
-    await addCheckin({
-      goalId,
-      date: today,
-      value
-    });
-    
-    setTodayCheckins(prev => new Set(prev).add(goalId));
+    await addCheckin({ goalId, date: today, value });
+    await loadData();
     setActiveCheckInGoalId(null);
   };
 
@@ -68,15 +64,16 @@ export const GoalList: React.FC<GoalListProps> = ({ onSelectGoal }) => {
     }
   };
 
-  if (loading) return <div style={{ textAlign: 'center', padding: '24px', color: 'var(--text-secondary)' }}>Loading your progress...</div>;
-
   if (goals.length === 0) return null;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
       {goals.map(goal => {
         const isCheckedIn = todayCheckins.has(goal.id);
         const isActive = activeCheckInGoalId === goal.id;
+        const stats = goalStats[goal.id];
+        
+        const hasProgress = goal.hasEndGoal && goal.targetValue && stats && stats.progressPercentage !== undefined;
         
         return (
           <div 
@@ -86,14 +83,15 @@ export const GoalList: React.FC<GoalListProps> = ({ onSelectGoal }) => {
             style={{ 
               display: 'flex', 
               flexDirection: 'column', 
-              padding: '16px 20px', 
+              padding: '24px', 
               cursor: isActive ? 'default' : 'pointer' 
             }}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            {/* Header: Title and Icon */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
               <div>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: 600, margin: '0 0 4px 0' }}>{goal.title}</h3>
-                <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', textTransform: 'capitalize' }}>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: 700, margin: '0 0 6px 0', color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>{goal.title}</h3>
+                <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600 }}>
                   {goal.scheduleType}
                 </span>
               </div>
@@ -105,8 +103,17 @@ export const GoalList: React.FC<GoalListProps> = ({ onSelectGoal }) => {
                     background: 'transparent',
                     border: 'none',
                     cursor: isCheckedIn ? 'default' : 'pointer',
-                    color: isCheckedIn ? 'var(--brand-primary)' : 'var(--text-secondary)',
-                    transition: 'all 0.2s ease',
+                    color: isCheckedIn ? 'var(--brand-primary)' : 'var(--text-muted)',
+                    transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                    transform: isCheckedIn ? 'scale(1.05)' : 'scale(1)',
+                  }}
+                  onMouseOver={(e) => {
+                    if (!isCheckedIn) e.currentTarget.style.color = 'var(--brand-primary-hover)';
+                    if (!isCheckedIn) e.currentTarget.style.transform = 'scale(1.1)';
+                  }}
+                  onMouseOut={(e) => {
+                    if (!isCheckedIn) e.currentTarget.style.color = 'var(--text-muted)';
+                    if (!isCheckedIn) e.currentTarget.style.transform = 'scale(1)';
                   }}
                 >
                   {isCheckedIn ? <CheckCircle2 size={32} /> : <Circle size={32} />}
@@ -114,44 +121,50 @@ export const GoalList: React.FC<GoalListProps> = ({ onSelectGoal }) => {
               )}
             </div>
 
+            {/* Inline Progress Bar */}
+            {hasProgress && stats && (
+              <div style={{ marginTop: '24px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
+                  <span>{stats.totalCheckIns} / {goal.targetValue} {goal.targetUnit}</span>
+                  <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{stats.progressPercentage}%</span>
+                </div>
+                <div style={{ width: '100%', height: '8px', backgroundColor: 'var(--bg-hover)', borderRadius: 'var(--radius-full)', overflow: 'hidden' }}>
+                  <div style={{ 
+                    width: `${stats.progressPercentage}%`, 
+                    height: '100%', 
+                    backgroundColor: 'var(--brand-primary)', 
+                    borderRadius: 'var(--radius-full)', 
+                    transition: 'width 0.6s cubic-bezier(0.4, 0, 0.2, 1)' 
+                  }} />
+                </div>
+              </div>
+            )}
+
+            {/* Inline Check-In Form */}
             {isActive && (
-              <form onSubmit={(e) => handleNumericSubmit(e, goal.id)} style={{ marginTop: '16px', display: 'flex', gap: '12px' }}>
+              <form onSubmit={(e) => handleNumericSubmit(e, goal.id)} style={{ marginTop: '24px', display: 'flex', gap: '12px', alignItems: 'center' }}>
                 <input 
                   type="number"
                   autoFocus
-                  placeholder={`Amount (${goal.targetUnit || 'value'})`}
+                  placeholder={`+ Amount (${goal.targetUnit || 'value'})`}
                   value={checkInValue}
                   onChange={(e) => setCheckInValue(e.target.value ? Number(e.target.value) : '')}
                   required
-                  style={{ flex: 1, padding: '10px 14px', borderRadius: '4px', border: '1px solid var(--border-subtle)', background: 'var(--bg-surface)', color: 'var(--text-primary)', outline: 'none' }}
+                  style={{ 
+                    flex: 1, 
+                    padding: '12px 16px', 
+                    borderRadius: 'var(--radius-md)', 
+                    border: '1px solid var(--border-subtle)', 
+                    background: 'var(--bg-base)', 
+                    color: 'var(--text-primary)', 
+                    outline: 'none',
+                    fontSize: '1rem'
+                  }}
                 />
-                <button 
-                  type="submit"
-                  style={{
-                    background: 'var(--brand-primary)',
-                    color: 'var(--bg-base)',
-                    border: 'none',
-                    padding: '0 16px',
-                    borderRadius: '4px',
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                  }}
-                >
-                  Done
+                <button type="submit" className="btn-primary">
+                  Log
                 </button>
-                <button 
-                  type="button"
-                  onClick={() => setActiveCheckInGoalId(null)}
-                  style={{
-                    background: 'transparent',
-                    color: 'var(--text-secondary)',
-                    border: '1px solid var(--border-subtle)',
-                    padding: '0 16px',
-                    borderRadius: '4px',
-                    fontWeight: 500,
-                    cursor: 'pointer',
-                  }}
-                >
+                <button type="button" className="btn-secondary" onClick={() => setActiveCheckInGoalId(null)}>
                   Cancel
                 </button>
               </form>
