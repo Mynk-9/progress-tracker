@@ -20,6 +20,9 @@ Check out the live app here: **[Progress Tracker](https://mayankmathur.github.io
 - **IndexedDB**: Client-side storage for offline capabilities.
 - **Lucide React**: Beautiful and consistent iconography.
 
+## Developer & Agent Context
+If you are an AI agent or a developer looking to contribute to or understand the project structure, please read the **[context.md](context.md)** file for a quick and comprehensive overview of the repository.
+
 ## Getting Started
 
 To run the project locally:

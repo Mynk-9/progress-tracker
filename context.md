@@ -1,25 +1,37 @@
-# Project Context
+# Agent Context & Project Overview
 
-## Overview
-Progress Tracker is a pure frontend Progressive Web App (PWA) designed for mobile devices. It tracks user-defined goals with flexible schedules, utilizing local storage (IndexedDB) with import/export capabilities, and features a premium, highly aesthetic UI.
+Welcome! If you are an AI agent or developer assigned to work on this repository, this file is your starting point. It provides a high-level summary of the project, architecture, file structure, and development guidelines.
 
-## Architecture
-- **Framework**: React (via Vite)
-- **Styling**: Vanilla CSS (Premium design, dark mode, glassmorphism)
-- **PWA**: vite-plugin-pwa
-- **Storage**: IndexedDB (using a lightweight wrapper like `idb`)
-- **Icons**: Lucide React
+## Project Summary
+Progress Tracker is a pure frontend Progressive Web App (PWA) designed primarily for mobile devices. It allows users to track personal goals with flexible scheduling (daily, weekly, custom). The app is built with a strong focus on a premium, aesthetic, Swiss Minimalist UI that supports both light and dark modes.
 
-## Current State
-- **Phase 3 & 4 Complete**: Implemented Goal Detail View (Heatmap, General Track, Schedule Track, individual goal stats) and Settings view (Data Export/Import). Micro-animations and responsive CSS applied.
-- **Feedback Received**: Moving away from dark-only neon glassmorphism to a light/dark adjustable Swiss Minimalist design. Enhancing check-ins to be quantitative (value-based) rather than just day-count, and expanding frequency options.
-- **Phase 1 of Premium Revamp Complete**: Established an advanced Design System in `index.css` (tokens, light/dark layers) and implemented a persistent Theme Toggle in `App.tsx`.
-- **Phase 2 of Premium Revamp Complete**: Redesigned the App Shell with a sticky frosted-glass header and introduced a polished `<Loading />` state.
-- **Phase 3 of Premium Revamp Complete**: Redesigned `Welcome.tsx` into a high-converting landing page with a hero section, abstract animated SVG, and a responsive feature grid.
-- **Phase 4 of Premium Revamp Complete**: Redesigned `GoalList.tsx` cards into robust widgets featuring animated inline linear progress bars and a polished check-in form.
-- **Phase 5 of Premium Revamp Complete**: Elevated `GoalDetail.tsx` analytics into structured metric cards and upgraded the `Heatmap` into an intensity-scaled, cascading-animated premium visualization.
-- **Next Step**: Polish, Review, and celebrate the launch of the Premium UI!
+All data is completely private and stored locally on the user's device using IndexedDB, meaning the app works perfectly offline. The app also supports exporting and importing data as JSON.
 
-## Data Model (Proposed Updates)
-- **Goal**: `id`, `title`, `hasEndGoal`, `targetValue`, `targetUnit` (new), `scheduleType` (expanded options), `createdAt`
-- **CheckIn**: `id`, `goalId`, `date`, `value` (now mandatory for quantitative tracking), `notes`
+## Architecture & Tech Stack
+- **Framework**: React (built with Vite)
+- **Styling**: Vanilla CSS (`index.css`) utilizing CSS variables for theme tokens (Light/Dark mode) and modern layouts (Grid/Flexbox). No Tailwind.
+- **PWA Capabilities**: Managed via `vite-plugin-pwa` for service workers and offline support.
+- **Data Storage**: Local IndexedDB via the `idb` library.
+- **Icons**: Lucide React.
+- **Routing**: Client-side view orchestrator (mobile-focused).
+
+## File Structure
+- `/src`: Contains the core React application.
+  - `/src/components`: UI components (`Welcome.tsx`, `GoalList.tsx`, `GoalDetail.tsx`, `Heatmap.tsx`, etc.).
+  - `/src/lib`: Data models, storage logic, and IndexedDB wrappers.
+  - `/src/index.css`: The central design system containing CSS variables, micro-animations, and component styles.
+  - `/src/App.tsx`: Main application shell, theme toggle, and view orchestrator.
+- `/docs`: Contains agent plan documents and the deployed production build files.
+- `AGENTS.md`: Crucial instructions for agents regarding planning, version control, and publishing workflows. **Must read** for operational rules!
+- `vite.config.ts`: Vite configuration, including PWA setup and GitHub Pages base URL (`/progress-tracker/`).
+
+## Agent Guidelines
+- **Publishing**: The app is deployed to GitHub Pages via the `release` branch. See `AGENTS.md` for the exact publishing protocol.
+- **Aesthetics First**: Any new UI must adhere to the established premium aesthetic (animations, glassmorphism, precise spacing) defined in `index.css`.
+- **Planning**: Before implementing large features, write a plan in the `/docs` directory.
+- **Context Updates**: Update this `context.md` file whenever significant architectural or state changes occur.
+
+## Current State & Recent Work
+- Transitioned to a light/dark adjustable Swiss Minimalist design with robust widgets, animated progress bars, metric cards, and an intensity-scaled heatmap.
+- GitHub Pages deployment configured with the correct Vite base path (`/progress-tracker/`).
+- Mobile layout bugs (scrolling, z-index overlays) resolved for seamless usage.
