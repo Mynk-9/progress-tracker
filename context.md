@@ -13,8 +13,9 @@ Progress Tracker is a pure frontend Progressive Web App (PWA) designed for mobil
 ## Current State
 - Core documentation (`README.md`, `agents.md`, `context.md`) created.
 - Initial plan formulated and stored in `docs/2026-10-04-plan.md`.
-- **Phase 1 Complete**: Scaffolded Vite React project, configured `vite-plugin-pwa`, initialized dark mode glassmorphism UI in `index.css`, and set up IndexedDB access logic (`idb`) in `src/lib/db.js`.
-- **Next Step**: Proceed to Phase 2 (Core Logic & Services) to hook up state management, build the goals API, and create UI components to display them.
+- **Phase 1 Complete**: Scaffolded Vite React project, configured `vite-plugin-pwa`, initialized dark mode glassmorphism UI, and set up IndexedDB.
+- **Phase 2 Complete**: Migrated to TypeScript, implemented Goal creation form, dashboard list, statistics engine (`stats.ts`), and basic check-in logic.
+- **Next Step**: Phase 3 - Implement Goal Detail View (Heatmap, General Track, Schedule Track, and individual goal stats).
 
 ## Data Model (Proposed)
 - **Goal**: `id`, `title`, `hasEndGoal`, `targetValue`, `schedule` (type, frequency), `createdAt`
