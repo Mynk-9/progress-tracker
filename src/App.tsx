@@ -4,6 +4,7 @@ import { GoalForm } from './components/GoalForm';
 import { GoalDetail } from './components/GoalDetail';
 import { Settings as SettingsComponent } from './components/Settings';
 import { Welcome } from './components/Welcome';
+import { Loading } from './components/Loading';
 import { Plus, Settings as SettingsIcon, Sun, Moon } from 'lucide-react';
 import { Goal, getGoals } from './lib/db';
 
@@ -72,6 +73,10 @@ function App() {
           onCancel={() => setShowForm(false)} 
         />
       );
+    }
+
+    if (hasGoals === null) {
+      return <Loading />;
     }
 
     if (hasGoals === false) {
