@@ -3,7 +3,11 @@ import { getGoals, Goal, addCheckin, getCheckinsForGoal } from '../lib/db';
 import { getLocalDateString } from '../lib/stats';
 import { CheckCircle2, Circle } from 'lucide-react';
 
-export const GoalList: React.FC = () => {
+export interface GoalListProps {
+  onSelectGoal: (goal: Goal) => void;
+}
+
+export const GoalList: React.FC<GoalListProps> = ({ onSelectGoal }) => {
   const [goals, setGoals] = useState<Goal[]>([]);
   const [loading, setLoading] = useState(true);
   const [todayCheckins, setTodayCheckins] = useState<Set<string>>(new Set());
@@ -32,7 +36,8 @@ export const GoalList: React.FC = () => {
     loadData();
   }, []);
 
-  const handleCheckIn = async (goalId: string, isCheckedIn: boolean) => {
+  const handleCheckIn = async (e: React.MouseEvent, goalId: string, isCheckedIn: boolean) => {
+    e.stopPropagation(); // Prevent opening the detail view when checking in
     if (isCheckedIn) return; // For now, only allow check-ins, no undos for simplicity in Phase 2
     
     const today = getLocalDateString();
@@ -53,7 +58,12 @@ export const GoalList: React.FC = () => {
       {goals.map(goal => {
         const isCheckedIn = todayCheckins.has(goal.id);
         return (
-          <div key={goal.id} className="card glass" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px' }}>
+          <div 
+            key={goal.id} 
+            className="card glass" 
+            onClick={() => onSelectGoal(goal)}
+            style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', cursor: 'pointer' }}
+          >
             <div>
               <h3 style={{ fontSize: '1.1rem', fontWeight: 500, margin: '0 0 4px 0' }}>{goal.title}</h3>
               <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', textTransform: 'capitalize' }}>
@@ -62,7 +72,7 @@ export const GoalList: React.FC = () => {
             </div>
             
             <button 
-              onClick={() => handleCheckIn(goal.id, isCheckedIn)}
+              onClick={(e) => handleCheckIn(e, goal.id, isCheckedIn)}
               style={{
                 background: 'transparent',
                 border: 'none',
