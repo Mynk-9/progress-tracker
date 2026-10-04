@@ -83,7 +83,6 @@ export const GoalList: React.FC<GoalListProps> = ({ onSelectGoal }) => {
             style={{ 
               display: 'flex', 
               flexDirection: 'column', 
-              padding: '24px', 
               cursor: isActive ? 'default' : 'pointer' 
             }}
           >
@@ -150,16 +149,8 @@ export const GoalList: React.FC<GoalListProps> = ({ onSelectGoal }) => {
                   value={checkInValue}
                   onChange={(e) => setCheckInValue(e.target.value ? Number(e.target.value) : '')}
                   required
-                  style={{ 
-                    flex: 1, 
-                    padding: '12px 16px', 
-                    borderRadius: 'var(--radius-md)', 
-                    border: '1px solid var(--border-subtle)', 
-                    background: 'var(--bg-base)', 
-                    color: 'var(--text-primary)', 
-                    outline: 'none',
-                    fontSize: '1rem'
-                  }}
+                  className="form-input"
+                  style={{ flex: 1 }}
                 />
                 <button type="submit" className="btn-primary">
                   Log

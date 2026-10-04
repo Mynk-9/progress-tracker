@@ -62,7 +62,7 @@ export const GoalDetail: React.FC<GoalDetailProps> = ({ goal, onBack }) => {
       </div>
 
       {/* Analytics Overview */}
-      <div className="card" style={{ padding: '24px' }}>
+      <div className="card">
         <h3 style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-primary)' }}>
           <Target size={20} color="var(--brand-primary)" /> Analytics Overview
         </h3>
@@ -112,7 +112,7 @@ export const GoalDetail: React.FC<GoalDetailProps> = ({ goal, onBack }) => {
         )}
       </div>
 
-      <div className="card" style={{ padding: '24px' }}>
+      <div className="card">
         <h3 style={{ fontSize: '1.1rem', fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px', color: 'var(--text-primary)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <CalendarDays size={20} color="var(--brand-primary)" /> Heatmap

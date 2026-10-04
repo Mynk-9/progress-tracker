@@ -53,44 +53,33 @@ export const Settings: React.FC<SettingsProps> = ({ onClose, onImportSuccess }) 
 
   return (
     <div className="card">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <h2 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <SettingsIcon size={20} /> Settings
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+        <h2 style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '1.4rem', fontWeight: 700, margin: 0 }}>
+          <SettingsIcon size={24} /> Settings
         </h2>
-        <button onClick={onClose} style={{ background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}>
+        <button className="btn-icon" onClick={onClose}>
           <X size={20} />
         </button>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        <div style={{ background: 'rgba(0,0,0,0.2)', padding: '16px', borderRadius: '12px' }}>
-          <h3 style={{ fontSize: '1rem', marginBottom: '8px' }}>Export Data</h3>
-          <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '12px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <div style={{ background: 'var(--bg-hover)', padding: '20px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
+          <h3 style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: '8px' }}>Export Data</h3>
+          <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '16px' }}>
             Download a backup of all your goals and check-ins to your device.
           </p>
           <button 
+            className="btn-secondary"
             onClick={handleExport}
-            style={{
-              width: '100%',
-              padding: '10px',
-              borderRadius: '8px',
-              border: '1px solid var(--border-subtle)',
-              background: 'var(--bg-glass-hover)',
-              color: 'var(--text-primary)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '8px',
-              cursor: 'pointer'
-            }}
+            style={{ width: '100%', padding: '12px' }}
           >
             <Download size={18} /> Export Backup
           </button>
         </div>
 
-        <div style={{ background: 'rgba(0,0,0,0.2)', padding: '16px', borderRadius: '12px' }}>
-          <h3 style={{ fontSize: '1rem', marginBottom: '8px' }}>Import Data</h3>
-          <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '12px' }}>
+        <div style={{ background: 'var(--bg-hover)', padding: '20px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
+          <h3 style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: '8px' }}>Import Data</h3>
+          <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '16px' }}>
             Restore your goals and check-ins from a previously exported backup file.
           </p>
           <input 
@@ -101,27 +90,16 @@ export const Settings: React.FC<SettingsProps> = ({ onClose, onImportSuccess }) 
             style={{ display: 'none' }} 
           />
           <button 
+            className="btn-secondary"
             onClick={() => fileInputRef.current?.click()}
-            style={{
-              width: '100%',
-              padding: '10px',
-              borderRadius: '8px',
-              border: '1px solid var(--brand-primary-glow)',
-              background: 'transparent',
-              color: 'var(--brand-primary)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '8px',
-              cursor: 'pointer'
-            }}
+            style={{ width: '100%', padding: '12px', color: 'var(--brand-primary)', borderColor: 'var(--border-focus)' }}
           >
             <Upload size={18} /> Import Backup
           </button>
         </div>
 
         {message && (
-          <div style={{ textAlign: 'center', fontSize: '0.9rem', color: 'var(--brand-secondary)', marginTop: '8px' }}>
+          <div style={{ textAlign: 'center', fontSize: '0.95rem', fontWeight: 500, color: 'var(--brand-secondary)', marginTop: '8px', padding: '12px', background: 'var(--bg-hover)', borderRadius: 'var(--radius-md)' }}>
             {message}
           </div>
         )}
