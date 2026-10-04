@@ -1,0 +1,82 @@
+import { openDB } from 'idb';
+
+const DB_NAME = 'progress_tracker_db';
+const DB_VERSION = 1;
+
+export async function initDB() {
+  const db = await openDB(DB_NAME, DB_VERSION, {
+    upgrade(db) {
+      if (!db.objectStoreNames.contains('goals')) {
+        const goalStore = db.createObjectStore('goals', { keyPath: 'id' });
+        goalStore.createIndex('createdAt', 'createdAt');
+      }
+      if (!db.objectStoreNames.contains('checkins')) {
+        const checkinStore = db.createObjectStore('checkins', { keyPath: 'id' });
+        checkinStore.createIndex('goalId', 'goalId');
+        checkinStore.createIndex('date', 'date');
+      }
+    },
+  });
+  return db;
+}
+
+export async function getGoals() {
+  const db = await initDB();
+  return db.getAll('goals');
+}
+
+export async function addGoal(goal) {
+  const db = await initDB();
+  return db.add('goals', { ...goal, id: crypto.randomUUID(), createdAt: Date.now() });
+}
+
+export async function deleteGoal(id) {
+  const db = await initDB();
+  return db.delete('goals', id);
+}
+
+export async function getCheckinsForGoal(goalId) {
+  const db = await initDB();
+  return db.getAllFromIndex('checkins', 'goalId', goalId);
+}
+
+export async function addCheckin(checkin) {
+  const db = await initDB();
+  return db.add('checkins', { ...checkin, id: crypto.randomUUID() });
+}
+
+export async function deleteCheckin(id) {
+  const db = await initDB();
+  return db.delete('checkins', id);
+}
+
+export async function exportData() {
+  const db = await initDB();
+  const goals = await db.getAll('goals');
+  const checkins = await db.getAll('checkins');
+  return JSON.stringify({ goals, checkins });
+}
+
+export async function importData(jsonData) {
+  try {
+    const data = JSON.parse(jsonData);
+    const db = await initDB();
+    const tx = db.transaction(['goals', 'checkins'], 'readwrite');
+    
+    if (data.goals) {
+      for (const goal of data.goals) {
+        await tx.objectStore('goals').put(goal);
+      }
+    }
+    if (data.checkins) {
+      for (const checkin of data.checkins) {
+        await tx.objectStore('checkins').put(checkin);
+      }
+    }
+    await tx.done;
+    return true;
+  } catch (error) {
+    console.error("Import failed", error);
+    return false;
+  }
+}
