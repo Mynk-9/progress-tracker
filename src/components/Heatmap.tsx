@@ -45,7 +45,7 @@ export const Heatmap: React.FC<HeatmapProps> = ({ checkinData }) => {
         style={{ 
           display: 'grid', 
           gridTemplateColumns: 'repeat(13, 1fr)', 
-          gap: '6px'
+          gap: 'min(6px, 1.5vw)'
         }}
       >
         {dates.map((d, index) => {

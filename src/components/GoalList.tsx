@@ -87,9 +87,9 @@ export const GoalList: React.FC<GoalListProps> = ({ onSelectGoal }) => {
             }}
           >
             {/* Header: Title and Icon */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-              <div>
-                <h3 style={{ fontSize: '1.25rem', fontWeight: 700, margin: '0 0 6px 0', color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>{goal.title}</h3>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px' }}>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: 700, margin: '0 0 6px 0', color: 'var(--text-primary)', letterSpacing: '-0.01em', wordBreak: 'break-word', overflowWrap: 'anywhere' }}>{goal.title}</h3>
                 <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600 }}>
                   {goal.scheduleType}
                 </span>
@@ -99,6 +99,7 @@ export const GoalList: React.FC<GoalListProps> = ({ onSelectGoal }) => {
                 <button 
                   onClick={(e) => initiateCheckIn(e, goal, isCheckedIn)}
                   style={{
+                    flexShrink: 0,
                     background: 'transparent',
                     border: 'none',
                     cursor: isCheckedIn ? 'default' : 'pointer',
