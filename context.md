@@ -11,13 +11,11 @@ Progress Tracker is a pure frontend Progressive Web App (PWA) designed for mobil
 - **Icons**: Lucide React
 
 ## Current State
-- Core documentation (`README.md`, `agents.md`, `context.md`) created.
-- Initial plan formulated and stored in `docs/2026-10-04-plan.md`.
-- **Phase 1 Complete**: Scaffolded Vite React project, configured `vite-plugin-pwa`, initialized dark mode glassmorphism UI, and set up IndexedDB.
-- **Phase 2 Complete**: Migrated to TypeScript, implemented Goal creation form, dashboard list, statistics engine (`stats.ts`), and basic check-in logic.
 - **Phase 3 & 4 Complete**: Implemented Goal Detail View (Heatmap, General Track, Schedule Track, individual goal stats) and Settings view (Data Export/Import). Micro-animations and responsive CSS applied.
-- **Next Step**: Project is practically fully feature-complete! Ready for testing and final deployment if requested.
+- **Feedback Received**: Moving away from dark-only neon glassmorphism to a light/dark adjustable Swiss Minimalist design. Enhancing check-ins to be quantitative (value-based) rather than just day-count, and expanding frequency options.
+- **New Plan Formulated**: Stored in `docs/2026-10-04-plan-1.md`.
+- **Next Step**: Execute Phase 1 of the new plan (Database & Data Model Overhaul).
 
-## Data Model (Proposed)
-- **Goal**: `id`, `title`, `hasEndGoal`, `targetValue`, `schedule` (type, frequency), `createdAt`
-- **CheckIn**: `id`, `goalId`, `date`, `value`, `notes`
+## Data Model (Proposed Updates)
+- **Goal**: `id`, `title`, `hasEndGoal`, `targetValue`, `targetUnit` (new), `scheduleType` (expanded options), `createdAt`
+- **CheckIn**: `id`, `goalId`, `date`, `value` (now mandatory for quantitative tracking), `notes`
