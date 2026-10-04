@@ -13,8 +13,8 @@ Progress Tracker is a pure frontend Progressive Web App (PWA) designed for mobil
 ## Current State
 - **Phase 3 & 4 Complete**: Implemented Goal Detail View (Heatmap, General Track, Schedule Track, individual goal stats) and Settings view (Data Export/Import). Micro-animations and responsive CSS applied.
 - **Feedback Received**: Moving away from dark-only neon glassmorphism to a light/dark adjustable Swiss Minimalist design. Enhancing check-ins to be quantitative (value-based) rather than just day-count, and expanding frequency options.
-- **New Plan Formulated**: A massive UI/UX revamp plan to elevate the app to a premium SaaS product is stored in `docs/2026-10-04-plan-2.md`.
-- **Next Step**: Execute Phase 1 of the new Premium UI Revamp (Design System & Theming Engine).
+- **Phase 1 of Premium Revamp Complete**: Established an advanced Design System in `index.css` (tokens, light/dark layers) and implemented a persistent Theme Toggle in `App.tsx`.
+- **Next Step**: Execute Phase 2 of the Premium UI Revamp (Global Layout & Empty States).
 
 ## Data Model (Proposed Updates)
 - **Goal**: `id`, `title`, `hasEndGoal`, `targetValue`, `targetUnit` (new), `scheduleType` (expanded options), `createdAt`
