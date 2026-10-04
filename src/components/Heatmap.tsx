@@ -41,16 +41,11 @@ export const Heatmap: React.FC<HeatmapProps> = ({ checkinData }) => {
 
   return (
     <div style={{ marginTop: '16px' }}>
-      <h4 style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '16px', fontWeight: 500 }}>Activity Heatmap (Last 90 days)</h4>
       <div 
         style={{ 
           display: 'grid', 
           gridTemplateColumns: 'repeat(13, 1fr)', 
-          gap: '6px',
-          background: 'var(--bg-surface)',
-          padding: '16px',
-          borderRadius: 'var(--radius-md)',
-          border: '1px solid var(--border-subtle)'
+          gap: '6px'
         }}
       >
         {dates.map((d, index) => {
