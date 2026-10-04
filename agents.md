@@ -11,3 +11,10 @@
 
 ## Version Control
 - The agent must keep adding atomic commits throughout the implementation process. Changes should be grouped logically and committed frequently with descriptive messages.
+
+## Publishing
+When asked to publish, follow these steps:
+- Move to the branch `release` and pull the latest changes from the `main` branch.
+- Run `npm run build` to create the production build.
+- Copy the content from the `dist` directory to the `/public` directory.
+- Commit these changes.
