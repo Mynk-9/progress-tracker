@@ -15,6 +15,7 @@
 ## Publishing
 When asked to publish, follow these steps:
 - Move to the branch `release` and pull the latest changes from the `main` branch.
+- Double check and ensure that you are in the `release` branch before proceeding.
 - Run `npm run build` to create the production build.
-- Copy the content from the `dist` directory to the `/public` directory.
+- Copy the content from the `dist` directory to the `docs/` directory.
 - Commit these changes.
