@@ -8,3 +8,6 @@
 - The project must maintain a single file named `context.md` in the root directory.
 - `context.md` stores the current state of the project, including completed features, ongoing work, and architectural decisions.
 - With every plan execution, the agent must update `context.md` to reflect the latest state.
+
+## Version Control
+- The agent must keep adding atomic commits throughout the implementation process. Changes should be grouped logically and committed frequently with descriptive messages.
