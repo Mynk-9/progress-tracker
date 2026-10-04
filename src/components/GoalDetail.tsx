@@ -36,14 +36,10 @@ export const GoalDetail: React.FC<GoalDetailProps> = ({ goal, onBack }) => {
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
         <button 
           onClick={onBack}
-          className="glass"
+          className="btn-secondary"
           style={{ 
-            background: 'transparent', 
-            border: '1px solid var(--border-subtle)', 
             padding: '8px', 
             borderRadius: '50%',
-            color: 'var(--text-primary)',
-            cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
@@ -59,7 +55,7 @@ export const GoalDetail: React.FC<GoalDetailProps> = ({ goal, onBack }) => {
         </div>
       </div>
 
-      <div className="card glass">
+      <div className="card">
         <h3 style={{ fontSize: '1rem', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
           <Target size={18} color="var(--brand-secondary)" /> Overview
         </h3>
@@ -106,7 +102,7 @@ export const GoalDetail: React.FC<GoalDetailProps> = ({ goal, onBack }) => {
         )}
       </div>
 
-      <div className="card glass">
+      <div className="card">
         <h3 style={{ fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
           <CalendarDays size={18} color="var(--brand-primary)" /> Schedule Track
         </h3>

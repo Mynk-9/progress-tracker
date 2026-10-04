@@ -1,16 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { GoalList } from './components/GoalList';
 import { GoalForm } from './components/GoalForm';
 import { GoalDetail } from './components/GoalDetail';
 import { Settings as SettingsComponent } from './components/Settings';
+import { Welcome } from './components/Welcome';
 import { Plus, Settings as SettingsIcon } from 'lucide-react';
-import { Goal } from './lib/db';
+import { Goal, getGoals } from './lib/db';
 
 function App() {
   const [showForm, setShowForm] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [selectedGoal, setSelectedGoal] = useState<Goal | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
+  
+  const [hasGoals, setHasGoals] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const checkGoals = async () => {
+      const goals = await getGoals();
+      setHasGoals(goals.length > 0);
+    };
+    checkGoals();
+  }, [refreshKey]);
 
   const renderContent = () => {
     if (showSettings) {
@@ -31,7 +42,7 @@ function App() {
           goal={selectedGoal} 
           onBack={() => {
             setSelectedGoal(null);
-            setRefreshKey(prev => prev + 1); // refresh list to get latest streaks
+            setRefreshKey(prev => prev + 1);
           }} 
         />
       );
@@ -49,6 +60,10 @@ function App() {
       );
     }
 
+    if (hasGoals === false) {
+      return <Welcome onStart={() => setShowForm(true)} />;
+    }
+
     return <GoalList key={refreshKey} onSelectGoal={setSelectedGoal} />;
   };
 
@@ -59,18 +74,14 @@ function App() {
           <h1>Progress</h1>
           <p className="subtitle">Track your goals, beautifully.</p>
         </div>
-        {!showForm && !selectedGoal && !showSettings && (
+        {!showForm && !selectedGoal && !showSettings && hasGoals !== false && (
           <div style={{ display: 'flex', gap: '8px' }}>
             <button 
               onClick={() => setShowSettings(true)}
-              className="glass"
+              className="btn-secondary"
               style={{
                 padding: '10px',
-                border: '1px solid var(--border-highlight)',
-                background: 'var(--bg-glass-hover)',
-                color: 'var(--text-primary)',
-                borderRadius: '50%',
-                cursor: 'pointer',
+                borderRadius: 'var(--radius-full)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center'
@@ -80,18 +91,13 @@ function App() {
             </button>
             <button 
               onClick={() => setShowForm(true)}
-              className="glass"
+              className="btn-secondary"
               style={{
                 padding: '10px 14px',
-                border: '1px solid var(--border-highlight)',
-                background: 'var(--bg-glass-hover)',
-                color: 'var(--text-primary)',
                 borderRadius: 'var(--radius-full)',
-                cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '6px',
-                fontWeight: 500
               }}
             >
               <Plus size={18} /> New

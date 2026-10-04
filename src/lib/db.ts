@@ -5,7 +5,8 @@ export interface Goal {
   title: string;
   hasEndGoal: boolean;
   targetValue?: number;
-  scheduleType: 'daily' | 'weekly' | 'custom_days' | 'monthly';
+  targetUnit?: string; // e.g., pages, km, minutes
+  scheduleType: 'daily' | 'weekdays' | 'weekends' | 'weekly' | 'bi-weekly' | 'monthly' | 'custom_days';
   createdAt: number;
 }
 

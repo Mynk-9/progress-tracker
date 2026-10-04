@@ -23,10 +23,15 @@ export function calculateGoalStats(goal: Goal, checkins: CheckIn[]): GoalStats {
   let totalCheckIns = sortedCheckIns.length;
   
   if (totalCheckIns === 0) {
-    return { totalCheckIns, currentStreak, longestStreak, progressPercentage: goal.hasEndGoal ? 0 : undefined };
+    return { totalCheckIns: 0, currentStreak: 0, longestStreak: 0, progressPercentage: goal.hasEndGoal ? 0 : undefined };
   }
 
-  // Calculate streaks (assuming daily for simplicity, will need complex logic for weekly/custom)
+  // Calculate total achieved value for quantitative goals
+  let totalAchieved = 0;
+  for (const c of sortedCheckIns) {
+    totalAchieved += (c.value || 1);
+  }
+
   let currentRun = 1;
   for (let i = 1; i < sortedCheckIns.length; i++) {
     const prevDate = new Date(sortedCheckIns[i-1].date);
@@ -42,7 +47,6 @@ export function calculateGoalStats(goal: Goal, checkins: CheckIn[]): GoalStats {
   }
   longestStreak = Math.max(longestStreak, currentRun);
   
-  // Current streak (check if the last checkin was today or yesterday)
   const lastCheckinDate = new Date(sortedCheckIns[sortedCheckIns.length - 1].date);
   const today = new Date(getLocalDateString());
   const diffFromToday = Math.round((today.getTime() - lastCheckinDate.getTime()) / (1000 * 60 * 60 * 24));
@@ -50,16 +54,16 @@ export function calculateGoalStats(goal: Goal, checkins: CheckIn[]): GoalStats {
   if (diffFromToday <= 1) {
     currentStreak = currentRun;
   } else {
-    currentStreak = 0; // Broken streak
+    currentStreak = 0; 
   }
 
   let progressPercentage;
   if (goal.hasEndGoal && goal.targetValue) {
-    progressPercentage = Math.min(100, Math.round((totalCheckIns / goal.targetValue) * 100));
+    progressPercentage = Math.min(100, Math.round((totalAchieved / goal.targetValue) * 100));
   }
 
   return {
-    totalCheckIns,
+    totalCheckIns: totalAchieved, // Using totalAchieved as the primary stat now instead of raw checkin count
     currentStreak,
     longestStreak,
     progressPercentage

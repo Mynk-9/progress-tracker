@@ -52,7 +52,7 @@ export const Settings: React.FC<SettingsProps> = ({ onClose, onImportSuccess }) 
   };
 
   return (
-    <div className="card glass">
+    <div className="card">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <h2 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <SettingsIcon size={20} /> Settings
